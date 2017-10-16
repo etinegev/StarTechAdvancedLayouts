@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AdvancedLayouts1/AdvancedLayouts1.iml" filepath="$PROJECT_DIR$/AdvancedLayouts1/AdvancedLayouts1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AdvancedLayouts2/AdvancedLayouts2.iml" filepath="$PROJECT_DIR$/AdvancedLayouts2/AdvancedLayouts2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StarTechAdvancedLayouts.iml" filepath="$PROJECT_DIR$/StarTechAdvancedLayouts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+    </modules>
+  </component>
+</project>
