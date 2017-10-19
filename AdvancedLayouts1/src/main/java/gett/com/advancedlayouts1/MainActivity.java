@@ -4,23 +4,26 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import gett.com.library.Helpers;
 import gett.com.library.Item;
 
 public class MainActivity extends AppCompatActivity
     implements View.OnClickListener, ImageRVAdapter.RVClickListener {
-  private RecyclerView mRecyclerView;
-  private GridView mGridView;
+  private ImageView mDetailedImg;
+  private TextView mDetailsNameTv, mDetailsTv;
   private ImageButton mGridBtn, mListBtn;
+  private RecyclerView mRecyclerView;
+  private ImageRVAdapter mAdapter;
   private Item[] mThumbIds = Helpers.getItemsForDisplay();
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -32,49 +35,46 @@ public class MainActivity extends AppCompatActivity
     mGridBtn = (ImageButton) findViewById(R.id.button_grid);
     mGridBtn.setOnClickListener(this);
     mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-    mGridView = (GridView) findViewById(R.id.grid_view);
+    mDetailedImg = (ImageView) findViewById(R.id.img_details);
+    mDetailsTv = (TextView) findViewById(R.id.tv_details);
+    mDetailsNameTv = (TextView) findViewById(R.id.tv_name);
+    mAdapter = new ImageRVAdapter(mThumbIds, this, ImageRVAdapter.GRID_TYPE);
 
-    LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-    mRecyclerView.setLayoutManager(mLayoutManager);
-
-    ImageRVAdapter mAdapter = new ImageRVAdapter(mThumbIds, this);
+    setLinearList(ImageRVAdapter.LIST_TYPE, new LinearLayoutManager(this), false);
     mRecyclerView.setAdapter(mAdapter);
 
-    mGridView.setAdapter(new ImageGVAdapter(this, mThumbIds));
-
-    mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        clickedOnItem(position);
-      }
-    });
-
-    showList();
+    if (mDetailedImg != null) {
+      clickedOnItem(0);
+    }
   }
 
   @Override public void onClick(View view) {
     switch (view.getId()) {
       case R.id.button_list:
-        showList();
-        break;
       case R.id.button_grid:
-        showGrid();
+        toggleLayouts();
         break;
     }
   }
 
-  private void showList() {
-    toggleLayouts(true);
+  private void toggleLayouts() {
+    if (mRecyclerView.getLayoutManager() instanceof GridLayoutManager) {
+      setLinearList(ImageRVAdapter.LIST_TYPE, new LinearLayoutManager(this), false);
+    } else {
+      setLinearList(ImageRVAdapter.GRID_TYPE, new GridLayoutManager(this, 2), true);
+    }
+    mRecyclerView.setAdapter(mAdapter);
   }
 
-  private void showGrid() {
-    toggleLayouts(false);
+  private void setLinearList(int listType, LinearLayoutManager layout, boolean isListEnabled) {
+    mAdapter.updateType(listType);
+    mRecyclerView.setLayoutManager(layout);
+    enableListButton(isListEnabled);
   }
 
-  private void toggleLayouts(boolean showList) {
-    mRecyclerView.setVisibility(showList ? View.VISIBLE : View.GONE);
-    mGridView.setVisibility(!showList ? View.VISIBLE : View.GONE);
-    mListBtn.setEnabled(!showList);
-    mGridBtn.setEnabled(showList);
+  private void enableListButton(boolean isListEnabled) {
+    mListBtn.setEnabled(isListEnabled);
+    mGridBtn.setEnabled(!isListEnabled);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,11 +87,17 @@ public class MainActivity extends AppCompatActivity
     return true;
   }
 
-  private void clickedOnItem(int adapterPosition) {
-    clickedOnItem(mThumbIds[adapterPosition]);
+  private void goToDetailsActivity(Item item) {
+    startActivity(DetailsActivity.createIntent(this, item));
   }
 
-  @Override public void clickedOnItem(Item item) {
-    startActivity(DetailsActivity.createIntent(this, item));
+  @Override public void clickedOnItem(int adapterPosition) {
+    if (mDetailedImg != null) {
+      mDetailedImg.setImageResource(mThumbIds[adapterPosition].getResId());
+      mDetailsNameTv.setText(mThumbIds[adapterPosition].getName());
+      mDetailsTv.setText(mThumbIds[adapterPosition].getDescription());
+    } else {
+      goToDetailsActivity(mThumbIds[adapterPosition]);
+    }
   }
 }

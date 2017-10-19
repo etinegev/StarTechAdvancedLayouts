@@ -36,6 +36,9 @@
       android:layout_gravity="center"
       android:layout_margin="10dp"
       android:gravity="center"
+      android:textColor="@android:color/black"
+      android:textSize="24sp"
+      android:textStyle="bold"
       tools:text="This is the item's name"/>
 
   <TextView
@@ -44,6 +47,8 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:gravity="center"
+      android:textColor="@android:color/black"
+      android:textSize="18sp"
       tools:text="This is the item's details"/>
 
 </LinearLayout>

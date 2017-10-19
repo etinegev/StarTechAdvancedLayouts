@@ -10,8 +10,8 @@
   <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="10dp"
       android:layout_gravity="end"
+      android:layout_margin="10dp"
       android:orientation="horizontal">
 
     <ImageButton android:id="@+id/button_list"
@@ -29,21 +29,9 @@
         app:srcCompat="@drawable/ic_grid_view"/>
   </LinearLayout>
 
-  <GridView
-      android:id="@+id/grid_view"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:horizontalSpacing="10dp"
-      android:numColumns="2"
-      android:stretchMode="columnWidth"
-      android:verticalSpacing="10dp"
-      android:visibility="visible"/>
-
   <android.support.v7.widget.RecyclerView
       android:id="@+id/recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:visibility="gone"
   />
 </LinearLayout>
